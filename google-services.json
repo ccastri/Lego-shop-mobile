@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "693208400867",
+    "project_id": "lego-app-fb912",
+    "storage_bucket": "lego-app-fb912.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693208400867:android:d7ecc9f5bfc1b132e516d6",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693208400867-pe2icjsq0jc7ejsqdqbboh8pecflg9i7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA44NDsVNCI3yP5BX3h9OvOWdmx2TCRpKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693208400867-pe2icjsq0jc7ejsqdqbboh8pecflg9i7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "693208400867-k1b2gt58omfnnb39ap6pga7oa7cdtla7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

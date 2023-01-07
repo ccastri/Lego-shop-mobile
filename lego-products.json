@@ -1,0 +1,31 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "imgUrl": "https://imagenes.elpais.com/resizer/AnkogrXW-Fq5X_Lg7sWiK4fpW_M=/1960x1103/cloudfront-eu-central-1.images.arcpublishing.com/prisa/VNB33ZC3HRE42ZE7ZITDXJVVQU.jpg",
+      "title": "Yoda: Lego Star Wars II",
+      "rating": 5,
+      "genre": "Lego Movies",
+      "short_description": "Yoda and his friends looking for adventures",
+      "price": 10000
+    },
+    {
+      "id": 2,
+      "imgUrl": "https://m.media-amazon.com/images/I/61see+UgYGS._AC_SY450_.jpg",
+      "title": "R2D2: Lego Star Wars II",
+      "rating": 5,
+      "genre": "Lego Movies",
+      "short_description": "R2D2 is looking for the next yedi",
+      "price": 10000
+    },
+    {
+      "id": 3,
+      "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7cbttQowWs_rf-hvaXr0ef05IhMYk3ETYxA&usqp=CAU",
+      "title": "Mary Poppins",
+      "rating": 5,
+      "genre": "Lego Movies",
+      "short_description": "Do you need somebody to take care of your babies tonight?",
+      "price": 10000
+    }
+  ]
+}
