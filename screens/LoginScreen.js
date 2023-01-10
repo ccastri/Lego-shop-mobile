@@ -2,96 +2,116 @@ import { View, Text, Button, SafeAreaView, TouchableScreen, TouchableOpacity, Im
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 // import useAuth from '../hooks/useAuth'
 import { useNavigation } from '@react-navigation/native'
-// import { ArrowLeftIcon } from 'react-native-heroicons/outline'
-// import { useDispatch, useSelector } from 'react-redux'
-// import {
-//     signInWithPopup,
-//     signOut,
-//     GoogleAuthProvider,
+import * as Google from 'expo-auth-session/providers/google';
+// import { ResponseType } from 'expo-auth-session';
+import { 
+    // createUserWithEmailAndPassword,
+    getAuth,
+    GoogleAuthProvider,
+    signInWithEmailAndPassword,
+    signInWithCredential,
+    onAuthStateChanged,
+    } from 'firebase/auth'
+import * as WebBrowser from 'expo-web-browser';
 
-// } from 'firebase/auth'
-import { app, auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import {app, auth} from '../firebase' //Revisarrrrr
 import useToggle from '../hooks/useToggle'
-import useAuth from '../hooks/useAuth'
-
-//  const googleSignIn = () => {
-//      const provider = new GoogleAuthProvider();
-//      try{
-
-//          signInWithPopup(auth, provider)
-//      }catch (err){
-//         console.log(err);
-//      }
-//  };
 
 
-//  const handleGoogleSignIn = async () => {
-//      try {
-//          await googleSignIn()
-//      } catch (err) {
-//          console.log(err)
-
-//      }
-
-// !!!! SECOND TRIAL !!!!
+WebBrowser.maybeCompleteAuthSession();
+// const auth = getAuth(app)
+//! Is almost working now
 const LoginScreen = () => {
 
-    const navigation = useNavigation()
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const navigation = useNavigation();
+    const [user, setUser] = useState(
+        {
+        name: null,
+        email: null,
+        password: null,
+        imgUrl: null,
+        id_token: null,
+    });
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-        })
-    }, [])
-    // TODO: to create the authReducer slice (SigUp and SignIn):
-    const createUser = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredential => {
-                Alert.alert('Account created!')
-                const user = userCredential.user;
-
-            }).catch(err => {
-                console.log(err)
-            })
-    }
-    const handleSignIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
+//!Sign in with Email and pasword
+    const handleSignIn = async () => {  
+        await signInWithEmailAndPassword(auth, user?.email, user?.password)
             .then((userCredential) => {
-                console.log(`Welcome ${email}!`)
-                const user = userCredential.user;
-                user && navigation.navigate('Home')
-
+                console.log(`Welcome ${user.email}!`)
+                const userData = userCredential.user;
+                console.log(userData)
+                userData && navigation.navigate('Home', {user:userData})
             }).catch(err => {
-                console.log(err)
+                Alert.alert(err.code)
                 Alert.alert(err.message)
             })
     }
+//!Sign In wit Google (Ongoing)
+console.log('holaaaa')
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+        expoClientId: '693208400867-jh81kg2dlvcp1f6utschpfff7fk7v6dc.apps.googleusercontent.com'
+        // [
+            // '693208400867-s83tm2ckt5mqh0udud62hj5fffogsuku.apps.googleusercontent.com',
+        // ],
+    })
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const { id_token } = response.params
+            // const auth = getAuth(app)
+            const credential = GoogleAuthProvider.credential(id_token);
+            console.log('holaaaa')
+            signInWithCredential(auth, credential)
+            .then((result) => {
+                console.log(result)
+                // const user = auth.currentUser;
+                // if (user) {
+                    //     const displayName = user.displayName;
+                    //     const email = user.email;
+                    //     const imgUrl = user.photoURL;
+                    //     const emailVerified = user.emailVerified;
+                    //     navigation.navigate('Home', {
+                        //         user: {
+                            //             name: displayName,
+                            //             email: email,
+                            //             imgUrl: imgUrl,
+                            //             isVerified: emailVerified,
+                            //         }
+                            //     })
+                            // }
+                            // else {
+                                //     // No user is signed in.
+                                //     console.log('Not user logged in yet')
+                                // }
+                                navigation.navigate('Home')
+                            })
+                            }
+                        }, [response]);
+                            
+                            //    previous local state setting
+                                // setUser({
+                                //     ...user,
+                                //     id: result._tokenResponse.uid,
+                                //     name: result._tokenResponse.displayName,
+                                //     email: result._tokenResponse.email,
+                                //     imgUrl: result._tokenResponse.photoUrl,
+                                // )
+                                // The user object has basic properties such as display name, email, etc.
+                    
+            
+            // useEffect(() => {
+            //     const unsubscribe = onAuthStateChanged(auth, (userLogged) => {
+            //         if (userLogged) {
+            //             const uid = userLogged.uid;
+
+            //         } else {
+            //             console.log('logged out currently');
+            //         }
+            //     });
+            //     unsubscribe;
+            // }, [])
 
 
-    // TODO: TO Adapt redux for general theme state management
-    // const dispatch = useDispatch();
-    // const onToggle = useSelector((state) => state.theme.isDark)
-    // console.log(onToggle)
-    //     useEffect(() => {
-    //         dispatch(setIsEnabled(onToggle))
-    //         console.log(onToggle);
-    // }, [dispatch])
-
-    const { toggle, toggleFunction } = useToggle()
-
-    // console.log(toggle)
-
-
-    // const { user, setPassword, setEmail, handleSignIn  } = useAuth()
-
-// console.log(user)
-
-
-
-
+        const { toggle, toggleFunction } = useToggle()
 
     return (
         <SafeAreaView className='flex-1 '>
@@ -129,29 +149,43 @@ const LoginScreen = () => {
                 <View className='absolute items-center w-full h-screen '>
 
                     <TextInput
-                        type='text'
-                        value={email}
+                        // type='text'
+                        value={user.email}
                         placeholder='Email'
-                        onChangeText={(text) => setEmail(text)}
+                        onChangeText={(text) => setUser({...user, email:text})}
                         className='w-80 p-4 top-20 bg-gray-200 absolute rounded-full'
                     />
                     <TextInput
-                        type='text'
-                        value={password}
+                        // type='text'
+                        value={user.password}
                         placeholder='Password'
-                        onChangeText={(text) => setPassword(text)}
+                        onChangeText={(text) => setUser({ ...user, password: text })}
                         className='w-80 p-4 top-40 bg-gray-200 absolute rounded-full items-center mx-auto'
                     />
                 </View>
             </View>
             
                 <TouchableOpacity
-                    className={`absolute mx-[25%] items-center bottom-40 w-52 ${toggle ? 'bg-red-500 ' : 'bg-black'} p-4 rounded-2xl`}
-                    // onPress={handleSignIn}
+                    className={`absolute mx-[25%] items-center bottom-60 w-52 ${toggle ? 'bg-red-500 ' : 'bg-black'} p-4 rounded-2xl`}
                     onPress={handleSignIn}
                     >
                 <Text className={`text-xl font-bold ${toggle ? 'text-black' : ' text-white'}  text-center`}>Sign in </Text>
                     </TouchableOpacity>
+                <TouchableOpacity
+                    className={`absolute mx-[25%] items-center bottom-40 w-52 ${toggle ? 'bg-red-500 ' : 'bg-black'} p-4 rounded-2xl`}
+                onPress={
+                    ()=>{promptAsync()
+                    }}
+                    >
+                <Text className={`text-xl font-bold ${toggle ? 'text-black' : ' text-white'}  text-center`}>Google login </Text>
+                    </TouchableOpacity>
+                <TouchableOpacity
+                    className={`absolute mx-[25%] items-center bottom-20 w-52 ${toggle ? 'bg-red-500 ' : 'bg-black'} p-4 rounded-2xl`}
+                    onPress = { ()=> navigation.navigate('SignUp') }
+                    >
+                <Text className={`text-xl font-bold ${toggle ? 'text-black' : ' text-white'}  text-center`}>Register </Text>
+                    </TouchableOpacity>
+ 
         </SafeAreaView>    
     )
 }

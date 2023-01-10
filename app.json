@@ -2,6 +2,10 @@
   "expo": {
     "name": "TestingNewThoughts",
     "slug": "TestingNewThoughts",
+    "scheme": "com.ccastri.testingnewthoughts",
+    "owner": "thejokercompany",
+    "originalFullName": "@thejokercompany/TestingNewThoughts",
+    "currentFullName": "@thejokercompany/TestingNewThoughts",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,11 +16,10 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/6c2b2e86-94ad-49b1-bb1a-425f13ec8653"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ccastri.TestingNewThoughts"
@@ -33,8 +36,11 @@
     },
     "extra": {
       "eas": {
-        "projectId": "18efc48f-3e0d-4421-a60b-4b8b93be4ca9"
+        "projectId": "6c2b2e86-94ad-49b1-bb1a-425f13ec8653"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }

@@ -1,39 +1,119 @@
+import * as Google from 'expo-auth-session/providers/google';
 import { View, Text } from 'react-native'
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useNavigation } from "react";
+import { ResponseType } from 'expo-auth-session';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    GoogleAuthProvider,
+    signInWithEmailAndPassword,
+    signInWithCredential,
+    onAuthStateChanged,
+} from 'firebase/auth'
+import { app, auth } from '../firebase'
+// import { useNavigation } from '@react-navigation/native'
 
 
 const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [user, setUser] = useState(null);
+    // navigation = useNavigation()
 
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        password: "",
+        imgUrl: "",
+        id_token: "",
+    });
+
+
+
+    // const user = auth.currentUser
     // !Sign up:
-    const createUser = () => {
+    const createUser = (email, password) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 Alert.alert('Account created!')
                 const user = userCredential.user;
-
+                setUser({ ...user, email: user.email });
+                console.log(user)
             }).catch(err => {
-                console.log(err)
+                console.log(err.code)
+                console.log(err.message)
             })
     }
 
     // !Sign in:
-    const handleSignIn = () => {
+    const handleSignIn = (email, password) => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 console.log(`Welcome ${email}!`)
                 const user = userCredential.user;
-                user && navigation.navigate('Home')
+                return user
+                // user && navigation.navigate('Home')
 
             }).catch(err => {
                 console.log(err)
                 Alert.alert(err.message)
             })
     }
+
+    //! Google login
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+
+        expoClientId: '693208400867-s83tm2ckt5mqh0udud62hj5fffogsuku.apps.googleusercontent.com',
+
+    }
+    )
+
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const { id_token } = response.params
+            const auth = getAuth()
+            const credential = GoogleAuthProvider.credential(id_token);
+            signInWithCredential(auth, credential)
+                .then(result => {
+                    setUser({
+                        ...user,
+                        id: result.uid,
+                        name: result.displayName,
+                        email: result.email,
+                        imgUrl: result.photoURL,
+                        id_token: result.getIdToken,
+                    })
+                    console.log(user)
+                    //                         // const userGoogle = result.user
+                })
+
+        }
+
+    }, [response]);
+
+    //! Persistence of auth Token session
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (userLogged) => {
+            if (userLogged) {
+                const uid = userLogged.uid;
+                console.log(userLogged);
+                //                     setUser({
+                //                         ...user,
+                //                         id: userLogged.uid,
+                //                         name: userLogged.displayName, 
+                //                         email: userLogged.email, 
+                //                         id_token: userLogged.getIdToken, 
+                //                         imgUrl: userLogged.photoURL
+                //                          })
+                //                          console.log(user);
+                navigation.navigate('Home', { user: user })
+            } else {
+                navigation.navigate('Login')
+                console.log('logged out currently');
+            }
+        });
+        unsubscribe;
+    }, [])
+
     // !Sign out:
     const handleSignOut = () => {
         signOut(auth)
@@ -47,11 +127,13 @@ export const AuthProvider = ({ children }) => {
                     email,
                     password,
                 },
-                setEmail,
-                setPassword,
+                user,
                 createUser,
                 handleSignIn,
                 handleSignOut,
+                request,
+                response,
+                promptAsync,
             }}>
             {children}
         </AuthContext.Provider>
@@ -64,9 +146,8 @@ export default function useAuth() {
 
 
 // import * as WebBrowser from 'expo-web-browser';
-// import * as Google from 'expo-auth-session/providers/google';
 // import * as Linking from 'expo-linking';
-// import { Button } from 'react-native';
+import { Button } from 'react-native';
 
 
 // Listener for when the user is attempting to sign in

@@ -11,6 +11,7 @@ import {
     HeartIcon,
 } from 'react-native-heroicons/outline'
 import { useDispatch, useSelector } from 'react-redux'
+import BasketIcon from '../components/basketIcon'
 import { addToBasket, removeFromBasket, selectBasketItems, selectBasketItemsById } from '../features/basketSlice';
 // import BasketIcon from '../components/BasketIcon'
 // import DishRow from '../components/DishRow'
@@ -21,7 +22,10 @@ export default function RestaurantScreen() {
     const dispatch = useDispatch()
 
     const items = useSelector(state => selectBasketItems(state))
-    console.log(items);
+    // console.log(items);
+
+    const itemsByID = useSelector(state => selectBasketItemsById(state, id))
+    console.log(itemsByID);
 
     const addItemToBasket = () => {
         dispatch(addToBasket({ id, title, short_description, price, imgUrl }))
@@ -72,8 +76,9 @@ export default function RestaurantScreen() {
     // console.log(urlFor(imgUrl.asset._ref).url())
     return (
         <>
-            {/* <BasketIcon
-                onPress={() => { }} /> */}
+            <BasketIcon
+                onPress={() => { navigation.navigate('Basket') }}
+            />
             <ScrollView>
                 <View className="relative ">
 
@@ -116,7 +121,7 @@ export default function RestaurantScreen() {
                         <Text className='flex-1 pl-2 text-md font-bold'> Looking for complementary sets?</Text>
                         <ChevronRightIcon color='blue' />
                     </TouchableOpacity>
-                    <View className='pl-2 flex-row items-center py-2 space-x-2'>
+                    <View className='pl-3 flex-row w-full items-center py-2 space-x-2'>
                         <TouchableOpacity>
                             <MinusCircleIcon
                                 disabled={!items.length}
@@ -135,6 +140,9 @@ export default function RestaurantScreen() {
                                 size={40}
                             />
                         </TouchableOpacity>
+                        <View>
+                            <Text className='ml-[25%]'>Add it as much as you prefer</Text>
+                        </View>
                     </View>
                 </View>
                 {/* <View className='pb-36'>

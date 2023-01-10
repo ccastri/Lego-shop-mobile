@@ -18,6 +18,7 @@ export const productSlice = createSlice({
     reducers: {
         setProducts: (state, action) => {
             state.product = action.payload
+            // console.log(product)
         }
     },
 })
@@ -26,5 +27,6 @@ export const productSlice = createSlice({
 export const { setProduct } = productSlice.actions
 
 export const selectProduct = (state) => state
+// export const selectProductById = (state, id) => state
 
 export default productSlice.reducer
