@@ -11,7 +11,7 @@ import {
     HeartIcon,
 } from 'react-native-heroicons/outline'
 import { useDispatch, useSelector } from 'react-redux'
-import BasketIcon from '../components/basketIcon'
+import BasketIcon from '../components/BasketIcon'
 import { addToBasket, removeFromBasket, selectBasketItems, selectBasketItemsById } from '../features/basketSlice';
 // import BasketIcon from '../components/BasketIcon'
 // import DishRow from '../components/DishRow'
@@ -50,19 +50,19 @@ export default function RestaurantScreen() {
     } = useRoute()
     // console.log(id);
     // const [products, setProducts] = useState([])
-
-    // useEffect(() => {
-    //     dispatch(setRestaurant({
-    //         id,
-    //         imgUrl,
-    //         title,
-    //         rating,
-    //         genre,
-    //         address,
-    //         short_description,
-    //         price,
-    //     }))
-    // }, [dispatch])
+    // TODO: store MUST HAVE the control of the initial state from the store
+    useEffect(() => {
+        dispatch(setRestaurant({
+            id,
+            imgUrl,
+            title,
+            rating,
+            genre,
+            address,
+            short_description,
+            price,
+        }))
+    }, [dispatch])
 
 
     useLayoutEffect(() => {

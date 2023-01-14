@@ -25,7 +25,10 @@ export const productSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { setProduct } = productSlice.actions
-
+// !Puede ser que tenga que hacer el fetch de los productos aquí
+// !O en el app también podría hacer. !La idea es: 
+//! con un solo fetch mostrar los productos en home
+//! y organizarlos en el carrito screen
 export const selectProduct = (state) => state
 // export const selectProductById = (state, id) => state
 

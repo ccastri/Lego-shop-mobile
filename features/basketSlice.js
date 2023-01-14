@@ -5,8 +5,11 @@ export const getCartItems = createAsyncThunk('cart/getCartItems',
         try {
             const resp = await axios.get(url);
             console.log(resp.data);
-            const dataa = await resp.data
-            console.log(dataa);
+            // TODO:Aquí puedo ver los items del basketScreen
+            // !cuando hago la API call (Falta la reduce fn)
+
+            const data = await resp.data
+            console.log(data);
             return dataa;
         }
         catch (err) {
@@ -30,14 +33,12 @@ export const basketSlice = createSlice({
             const index = state.items.findIndex(item => item.id === action.payload.id)
 
             let newBasket = [...state.items]
-            if (index >= 0) {
-                newBasket.splice(index, 1)
-            } else {
-
-                console.warn(`Product (id:${id}) cannot be removed. It's not yer in the basket`)
-            }
-
-
+            index >= 0
+                ? (
+                    newBasket.splice(index, 1)
+                ) : (
+                    console.warn(`Product (id:${id}) cannot be removed. It's not yer in the basket`)
+                )
             state.items = newBasket;
         },
         // incrementByAmount: (state, action) => {
@@ -48,7 +49,8 @@ export const basketSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { addToBasket, removeFromBasket } = basketSlice.actions
-
+// !Este mkita me está dejando seleccionar
+// !los objects del carrito pero en json
 export const selectBasketItems = (state) => state.basket.items
 
 export const selectBasketItemsById = (state, id) =>

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 // import Currency from 'react-currency-formatter';
 
 
-export default BasketIcon = () => {
+const BasketIcon = () => {
     const items = useSelector(selectBasketItems)
     const navigation = useNavigation()
     const basketTotal = useSelector(selectBasketTotal)
@@ -33,3 +33,5 @@ export default BasketIcon = () => {
         </View>
     )
 }
+
+export default BasketIcon

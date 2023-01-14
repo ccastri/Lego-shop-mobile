@@ -37,9 +37,9 @@ const LoginScreen = () => {
     const handleSignIn = async () => {  
         await signInWithEmailAndPassword(auth, user?.email, user?.password)
             .then((userCredential) => {
-                console.log(`Welcome ${user.email}!`)
+                // console.log(`Welcome ${user.email}!`)
                 const userData = userCredential.user;
-                console.log(userData)
+                // console.log(userData)
                 userData && navigation.navigate('Home', {user:userData})
             }).catch(err => {
                 Alert.alert(err.code)
@@ -49,7 +49,8 @@ const LoginScreen = () => {
 //!Sign In wit Google (Ongoing)
 console.log('holaaaa')
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-        expoClientId: '693208400867-jh81kg2dlvcp1f6utschpfff7fk7v6dc.apps.googleusercontent.com'
+        expoClientId: '693208400867-jh81kg2dlvcp1f6utschpfff7fk7v6dc.apps.googleusercontent.com',
+        androidClientId: '693208400867-4576kt3auk33od4hj6ua8f46978mrvrj.apps.googleusercontent.com'
         // [
             // '693208400867-s83tm2ckt5mqh0udud62hj5fffogsuku.apps.googleusercontent.com',
         // ],
@@ -61,41 +62,13 @@ console.log('holaaaa')
             const credential = GoogleAuthProvider.credential(id_token);
             console.log('holaaaa')
             signInWithCredential(auth, credential)
-            .then((result) => {
-                console.log(result)
-                // const user = auth.currentUser;
-                // if (user) {
-                    //     const displayName = user.displayName;
-                    //     const email = user.email;
-                    //     const imgUrl = user.photoURL;
-                    //     const emailVerified = user.emailVerified;
-                    //     navigation.navigate('Home', {
-                        //         user: {
-                            //             name: displayName,
-                            //             email: email,
-                            //             imgUrl: imgUrl,
-                            //             isVerified: emailVerified,
-                            //         }
-                            //     })
-                            // }
-                            // else {
-                                //     // No user is signed in.
-                                //     console.log('Not user logged in yet')
-                                // }
+            .then(() => {
                                 navigation.navigate('Home')
                             })
                             }
                         }, [response]);
                             
-                            //    previous local state setting
-                                // setUser({
-                                //     ...user,
-                                //     id: result._tokenResponse.uid,
-                                //     name: result._tokenResponse.displayName,
-                                //     email: result._tokenResponse.email,
-                                //     imgUrl: result._tokenResponse.photoUrl,
-                                // )
-                                // The user object has basic properties such as display name, email, etc.
+                            
                     
             
             // useEffect(() => {
@@ -169,7 +142,7 @@ console.log('holaaaa')
                     className={`absolute mx-[25%] items-center bottom-60 w-52 ${toggle ? 'bg-red-500 ' : 'bg-black'} p-4 rounded-2xl`}
                     onPress={handleSignIn}
                     >
-                <Text className={`text-xl font-bold ${toggle ? 'text-black' : ' text-white'}  text-center`}>Sign in </Text>
+                <Text className={`text-xl font-bold ${toggle ? 'text-black' : ' text-white'}  text-center`}>Login </Text>
                     </TouchableOpacity>
                 <TouchableOpacity
                     className={`absolute mx-[25%] items-center bottom-40 w-52 ${toggle ? 'bg-red-500 ' : 'bg-black'} p-4 rounded-2xl`}
@@ -183,7 +156,7 @@ console.log('holaaaa')
                     className={`absolute mx-[25%] items-center bottom-20 w-52 ${toggle ? 'bg-red-500 ' : 'bg-black'} p-4 rounded-2xl`}
                     onPress = { ()=> navigation.navigate('SignUp') }
                     >
-                <Text className={`text-xl font-bold ${toggle ? 'text-black' : ' text-white'}  text-center`}>Register </Text>
+                <Text className={`text-xl font-bold ${toggle ? 'text-black' : ' text-white'}  text-center`}>Sign Up </Text>
                     </TouchableOpacity>
  
         </SafeAreaView>    

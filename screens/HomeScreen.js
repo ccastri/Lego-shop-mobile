@@ -1,24 +1,20 @@
-import { View, Text, SafeAreaView, TouchableOpacity, Image, Switch, ScrollView } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import useAuth from '../hooks/useAuth'
-import {
-    AdjustmentsVerticalIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingCartIcon, UserIcon
-} from 'react-native-heroicons/outline'
-import { useNavigation, useRoute } from '@react-navigation/native'
-// import { auth } from '../firebase'
+import { useNavigation } from '@react-navigation/native'
 import { signOut } from 'firebase/auth'
-import useToggle from '../hooks/useToggle'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import React, { useEffect } from 'react'
+import { Image, SafeAreaView, ScrollView, Switch, TouchableOpacity, View } from 'react-native'
+import { ShoppingCartIcon, UserIcon } from 'react-native-heroicons/outline'
+import { Alert } from 'react-native-web'
 import FeaturedRow from '../components/FeaturedRow'
-// import { Alert } from 'react-native-web'
-import { app, auth } from '../firebase'
+import { auth, db } from '../firebase'
+import useToggle from '../hooks/useToggle'
 
 
-const HomeScreen = (
-) => {
+const HomeScreen = () => {
+    const { toggle, toggleFunction } = useToggle()
     const navigation = useNavigation()
-    // const auth = getAuth(app)
+
     const user = auth.currentUser
-    // console.log(user.email)
 
 
     // !Sign Out method
@@ -28,11 +24,26 @@ const HomeScreen = (
             navigation.navigate('Login')
         }).catch((error) => {
             // An error happened.
-            // Alert.alert(error)
+            Alert.alert(error)
         });
     }
-    const { toggle, toggleFunction } = useToggle()
-    // console.log(toggle)
+    // !Store user in db
+    const setUser = async (user) => {
+        console.log(user);
+        await setDoc(doc(db, "users", user.uid), {
+            name: user.displayName,
+            email: user.email,
+            image: user.photoURL,
+            // id_token: user.id_token,
+            timeStamp: serverTimestamp(),
+        }
+        )
+    };
+
+    user && useEffect(() => {
+        setUser(user);
+        console.log(user)
+    }, [user])
 
 
     return (
@@ -44,29 +55,24 @@ const HomeScreen = (
                     value={toggle}
                     className={`rounded-full ${toggle ? ('bg-yellow-500') : ('bg-blue-300')}`}
                 />
-
                 <TouchableOpacity
-                    title='Login'
-                    // onPress={() => navigation.navigate('Login')}
                     onPress={logout}
                     className={`ml-5${toggle ? ('bg-black') : ('bg-red-500')} p-2 rounded-full`} >
-                    {
-                        user ?
-                            (
-                                <View className='items-center'>
-                                    <Image
-                                        source={{ uri: user.photoURL }}
-                                        className='h-14 w-14 rounded-full'
-                                    />
-                                    <Text>We're in production mate {user.displayName}</Text>
-                                </View>
-                            ) :
-                            (<UserIcon size={35} color={`${toggle ? ('yellow') : ('gray')}`} />
-                            )}
+                    {user ?
+                        (
+                            <Image
+                                source={{ uri: user.photoURL }}
+                                className='h-14 w-14 rounded-full'
+                            />
+                        ) :
+                        (<UserIcon
+                            size={35}
+                            color={`${toggle ? ('yellow') : ('gray')}`}
+                            className={`${toggle ? ('bg-yellow-500') : ('bg-blue-300')}`} />
+                        )
+                    }
                 </TouchableOpacity>
                 <TouchableOpacity
-                    title='Login'
-                    // onPress={() => navigation.navigate('Login')}
                     onPress={() => { logout }}
                     className={`ml-5 p-2 ${toggle ? ('bg-black') : ('bg-red-600')} rounded-full`}  >
                     <Image
@@ -74,9 +80,6 @@ const HomeScreen = (
                         className='h-10 w-10 rounded-full b' />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    title='Cart'
-                    // onPress={() => navigation.navigate('Cart')}
-
                     className={`l-5 ${toggle ? ('bg-black') : ('bg-red-600')} p-2 rounded-full`} >
                     <ShoppingCartIcon
                         size={35}
@@ -89,15 +92,6 @@ const HomeScreen = (
                     paddingBottom: 100,
                 }}
                 className='pt-4 h-screen '>
-                <View className='flex-row items-center px-4 space-x-4 pb-4'>
-                    {/* <Image source={{ uri: route.params.user.imgUrl }}
-                        className='h-10 w-10 rounded-full b'
-                        onPress={logout}
-                    /> */}
-
-                    {/* <Text className='font-semibold text-gray-600'>Hi! {route.params.user.name}. thanks for being here</Text> */}
-                </View>
-                {/* } */}
                 <FeaturedRow
                     key={11}
                     id={11}
@@ -116,8 +110,6 @@ const HomeScreen = (
                     title='ADDS'
                     description='Some advertising campaign to get some founds'
                 />
-
-
             </ScrollView>
         </SafeAreaView>
     )
