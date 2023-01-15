@@ -13,10 +13,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import BasketIcon from '../components/BasketIcon'
 import { addToBasket, removeFromBasket, selectBasketItems, selectBasketItemsById } from '../features/basketSlice';
-// import BasketIcon from '../components/BasketIcon'
-// import DishRow from '../components/DishRow'
-// import { setRestaurant } from '../features/restaurantSlice'
-// import { urlFor } from '../sanity'r
+
 
 export default function RestaurantScreen() {
     const dispatch = useDispatch()
@@ -26,7 +23,7 @@ export default function RestaurantScreen() {
 
     const itemsByID = useSelector(state => selectBasketItemsById(state, id))
     console.log(itemsByID);
-
+    //! Hay que revisar que pasa con ese title
     const addItemToBasket = () => {
         dispatch(addToBasket({ id, title, short_description, price, imgUrl }))
     }
@@ -36,44 +33,7 @@ export default function RestaurantScreen() {
         }
         dispatch(removeFromBasket({ id, title, short_description, price, imgUrl }))
     }
-    const navigation = useNavigation()
-    const {
-        params: {
-            id,
-            imgUrl,
-            title,
-            rating,
-            genre,
-            short_description,
-            price,
-        },
-    } = useRoute()
-    // console.log(id);
-    // const [products, setProducts] = useState([])
-    // TODO: store MUST HAVE the control of the initial state from the store
-    useEffect(() => {
-        dispatch(setRestaurant({
-            id,
-            imgUrl,
-            title,
-            rating,
-            genre,
-            address,
-            short_description,
-            price,
-        }))
-    }, [dispatch])
 
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-        })
-    }, [])
-
-
-
-    // console.log(urlFor(imgUrl.asset._ref).url())
     return (
         <>
             <BasketIcon

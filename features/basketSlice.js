@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 export const getCartItems = createAsyncThunk('cart/getCartItems',
     async (_, thunkAPI) => {
         try {
-            const resp = await axios.get(url);
+            const resp = await axios.get('https://github.com/ccastri/dummy-data');
             console.log(resp.data);
             // TODO:Aquí puedo ver los items del basketScreen
             // !cuando hago la API call (Falta la reduce fn)

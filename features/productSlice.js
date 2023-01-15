@@ -1,30 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
+// import { createSlice, } from "@reduxjs/toolkit"
 
 const initialState = {
-    product: {
-        id: null,
-        imgUrl: null,
-        title: null,
-        rating: null,
-        genre: null,
-        short_description: null,
-        price: null,
-    },
+    product: []
 }
+
+
+
 
 export const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-        setProducts: (state, action) => {
-            state.product = action.payload
-            // console.log(product)
+        setProducts: (state, { payload }) => {
+            state.product = payload
+            console.log(state.product)
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setProduct } = productSlice.actions
+export const { setProducts } = productSlice.actions
 // !Puede ser que tenga que hacer el fetch de los productos aquí
 // !O en el app también podría hacer. !La idea es: 
 //! con un solo fetch mostrar los productos en home

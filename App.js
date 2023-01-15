@@ -1,73 +1,70 @@
 import * as React from 'react';
-import { Image, SafeAreaView, Text, View, Button } from 'react-native';
-import { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './screens/HomeScreen';
+import { useEffect, useState } from 'react';
 // TODO:
 // import useAuth, { AuthProvider } from './hooks/useAuth';
+import axios from "axios";
+import { Provider } from 'react-redux';
+import AppWrapper from './AppWrapper';
+import { ToggleProvider } from './hooks/useToggle';
 import { store } from './store';
-import { Provider } from 'react-redux'
-import LoginScreen from './screens/LoginScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import ProductScreen from './screens/ProductScreen';
-import RegisterScreen from './screens/ProductScreen';
-import useToggle, { ToggleProvider } from './hooks/useToggle';
-import BasketScreen from './screens/BasketScreen';
 
 
 
-const Stack = createNativeStackNavigator();
+
 
 
 export default function App() {
-  const { toggle } = useToggle()
-  // const { user } = useAuth()
+
+
+
+  const [products, setProducts] = useState([{
+    id: null,
+    title: null,
+    imgUrl: null,
+    rating: null,
+
+
+
+
+
+  }])
+
+  const getProducts = async () => {
+
+    try {
+      const resp = await axios.get('https://my-json-server.typicode.com/ccastri/dummy-data/products');
+      // console.log(resp.data);
+      // TODO:Aquí puedo ver los items del basketScreen
+      // !cuando hago la API call (Falta la reduce fn)
+
+      const data = await resp.data
+      setProducts(data)
+
+      return data;
+    }
+    catch (err) {
+      console.log(err)
+
+    }
+  }
+  useEffect(() => {
+    getProducts()
+    // dispatch(setProducts({
+    //   id: products.id,
+    //   imgUrl: products.imgUrl,
+    //   title: products.title,
+    //   rating: products.rating
+    // }))
+
+  }, [])
+
   return (
     <>
-
-
-
-      <NavigationContainer>
-        <Provider store={store}>
-          <ToggleProvider>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="SignUp"
-                component={SignUpScreen}
-                options={{
-                  headerShown: false
-                }}
-
-              />
-              <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                  headerShown: false
-                }}
-
-              />
-              <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{
-                  headerShown: false
-                }} />
-              <Stack.Screen
-                name="Product"
-                component={ProductScreen}
-                options={{ presentation: 'modal', headerShown: false }}
-              />
-              <Stack.Screen
-                name="Basket"
-                component={BasketScreen}
-                options={{ presentation: 'modal', headerShown: false }}
-              />
-            </Stack.Navigator>
-          </ToggleProvider>
-        </Provider>
-      </NavigationContainer>
+      <Provider store={store}>
+        <ToggleProvider>
+          <AppWrapper products={products} />
+        </ToggleProvider>
+      </Provider>
     </>
   );
 }

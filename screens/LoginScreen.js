@@ -60,7 +60,7 @@ console.log('holaaaa')
             const { id_token } = response.params
             // const auth = getAuth(app)
             const credential = GoogleAuthProvider.credential(id_token);
-            console.log('holaaaa')
+            // console.log('holaaaa')
             signInWithCredential(auth, credential)
             .then(() => {
                                 navigation.navigate('Home')

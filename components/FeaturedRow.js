@@ -6,12 +6,15 @@ import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import ProductCard from './ProductCard'
 import axios from "axios";
 import useToggle from '../hooks/useToggle';
+import { useSelector } from 'react-redux';
+import { setProducts } from '../features/productSlice';
 
 
 const FeaturedRow = ({ id, title, description }) => {
     // const [products, setProducts] = useState([])
     const { toggle, toggleFunction } = useToggle()
-    const [products, setProducts] = useState([])
+    const products = useSelector(state => setProducts(state))
+    console.log(products.payload.products)
 
     return (
         <View className={`${toggle ? 'bg-black' : 'bg-red-600'} items-start `}>
@@ -28,7 +31,7 @@ const FeaturedRow = ({ id, title, description }) => {
 
                 }}>
 
-                {products?.map(product => (
+                {/* {products.payload.product?.map(product => (
 
 
                     <ProductCard
@@ -47,7 +50,7 @@ const FeaturedRow = ({ id, title, description }) => {
 
                     />
                 ))
-                }
+                } */}
             </ScrollView>
         </View>
     )

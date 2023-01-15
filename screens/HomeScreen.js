@@ -1,21 +1,49 @@
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { signOut } from 'firebase/auth'
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import React, { useEffect } from 'react'
 import { Image, SafeAreaView, ScrollView, Switch, TouchableOpacity, View } from 'react-native'
 import { ShoppingCartIcon, UserIcon } from 'react-native-heroicons/outline'
 import { Alert } from 'react-native-web'
+import { useSelector } from 'react-redux'
 import FeaturedRow from '../components/FeaturedRow'
+import { setProducts } from '../features/productSlice'
 import { auth, db } from '../firebase'
 import useToggle from '../hooks/useToggle'
 
 
 const HomeScreen = () => {
+    // const getProducts = async () => {
+    //     try {
+    //         const resp = await axios.get('https://my-json-server.typicode.com/ccastri/dummy-data/products');
+    //         const data = await resp.data()
+    //         setProducts(data)
+    //         return data;
+    //     }
+    //     catch (err) {
+    //         console.log(err)
+    //     }
+    // }
+    // const products = useSelector(state => setProducts(state))
+    // console.log(JSON.stringify(products));
     const { toggle, toggleFunction } = useToggle()
     const navigation = useNavigation()
+    // const {
+    //     params: {
+    //         id,
+    //         imgUrl,
+    //         title,
+    //         rating,
+    //         genre,
+    //         short_description,
+    //         price,
+    //     },
+    // } = useRoute()
+    // const selecProduct =
 
     const user = auth.currentUser
-
+    const products = useSelector(state => setProducts(state.product))
+    // console.log(products.product)
 
     // !Sign Out method
     const logout = () => {
@@ -29,7 +57,7 @@ const HomeScreen = () => {
     }
     // !Store user in db
     const setUser = async (user) => {
-        console.log(user);
+        // console.log(user);
         await setDoc(doc(db, "users", user.uid), {
             name: user.displayName,
             email: user.email,
@@ -42,7 +70,7 @@ const HomeScreen = () => {
 
     user && useEffect(() => {
         setUser(user);
-        console.log(user)
+        // console.log(user)
     }, [user])
 
 
@@ -87,6 +115,7 @@ const HomeScreen = () => {
                         className='h-10 w-10 ' />
                 </TouchableOpacity>
             </View>
+            {/*Card Rows */}
             <ScrollView
                 contentContainerStyle={{
                     paddingBottom: 100,
