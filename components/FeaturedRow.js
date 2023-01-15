@@ -7,15 +7,13 @@ import ProductCard from './ProductCard'
 import axios from "axios";
 import useToggle from '../hooks/useToggle';
 import { useSelector } from 'react-redux';
-import { setProducts } from '../features/productSlice';
+import { getProducts, setProducts } from '../features/productSlice';
 
 
 const FeaturedRow = ({ id, title, description }) => {
-    // const [products, setProducts] = useState([])
+    const [products, setProducts] = useState(useSelector(getProducts))
     const { toggle, toggleFunction } = useToggle()
-    const products = useSelector(state => setProducts(state))
-    console.log(products.payload.products)
-
+    // console.log(products)
     return (
         <View className={`${toggle ? 'bg-black' : 'bg-red-600'} items-start `}>
             <View className={`mt-4 mx-8 px-4 rounded-xl ${toggle ? 'bg-yellow-500' : 'bg-blue-300'}`}>
@@ -23,17 +21,12 @@ const FeaturedRow = ({ id, title, description }) => {
                 <Text className={`items-start font-medium text-lg ${toggle ? 'text-zinc-500' : 'text-zinc-500'}`}>{description}</Text>
                 {/* {/* <ArrowRightIcon color='#00CCBB' /> */}
             </View>
-
             <ScrollView
                 horizontal
                 className=' m-4 '
                 contentContainerStyle={{
-
                 }}>
-
-                {/* {products.payload.product?.map(product => (
-
-
+                {products.map(product => (
                     <ProductCard
                         key={product.id} // number
                         id={product.id} //string
@@ -41,16 +34,11 @@ const FeaturedRow = ({ id, title, description }) => {
                         title={product.title} // string
                         rating={product.rating} //number
                         genre={product.genre} // string
-
                         address={product.address} // string
                         short_description={product.short_description} // string
-                        // dishes={restaurant.dishes} // string
-                        // long={restaurant.long} // number
                         price={product.price} // number
-
                     />
-                ))
-                } */}
+                ))}
             </ScrollView>
         </View>
     )

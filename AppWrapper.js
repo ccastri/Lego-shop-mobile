@@ -30,7 +30,7 @@ export default function AppWrapper({ products }) {
     //   rating: products.rating
     // }))
 
-  }, [])
+  }, [products])
 
   return (
     <>

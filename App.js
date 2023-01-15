@@ -17,44 +17,31 @@ export default function App() {
 
 
 
-  const [products, setProducts] = useState([{
-    id: null,
-    title: null,
-    imgUrl: null,
-    rating: null,
+  const [products, setProducts] = useState([])
 
-
-
-
-
-  }])
-
-  const getProducts = async () => {
-
-    try {
-      const resp = await axios.get('https://my-json-server.typicode.com/ccastri/dummy-data/products');
-      // console.log(resp.data);
-      // TODO:Aquí puedo ver los items del basketScreen
-      // !cuando hago la API call (Falta la reduce fn)
-
-      const data = await resp.data
-      setProducts(data)
-
-      return data;
-    }
-    catch (err) {
-      console.log(err)
-
-    }
-  }
   useEffect(() => {
-    getProducts()
-    // dispatch(setProducts({
-    //   id: products.id,
-    //   imgUrl: products.imgUrl,
-    //   title: products.title,
-    //   rating: products.rating
-    // }))
+    (async () => {
+
+      try {
+        const resp = await axios.get('https://my-json-server.typicode.com/ccastri/dummy-data/products');
+        // console.log(resp.data);
+        // TODO:Aquí puedo ver los items del basketScreen
+        // !cuando hago la API call (Falta la reduce fn)
+
+        const data = await resp.data
+        setProducts(data)
+        console.log(products);
+
+        return data;
+      }
+      catch (err) {
+        console.log(err)
+
+      }
+    }
+    )
+      ()
+
 
   }, [])
 

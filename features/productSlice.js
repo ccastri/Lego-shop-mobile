@@ -12,9 +12,9 @@ export const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-        setProducts: (state, { payload }) => {
-            state.product = payload
-            console.log(state.product)
+        setProducts: (state, action) => {
+            state.product = action.payload
+            // product && console.log(product)
         }
     },
 })
@@ -25,7 +25,8 @@ export const { setProducts } = productSlice.actions
 // !O en el app también podría hacer. !La idea es: 
 //! con un solo fetch mostrar los productos en home
 //! y organizarlos en el carrito screen
-export const selectProduct = (state) => state
+// export const selectProduct = (state) => state
+export const getProducts = (state) => state.product?.product;
 // export const selectProductById = (state, id) => state
 
 export default productSlice.reducer

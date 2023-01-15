@@ -42,7 +42,7 @@ const HomeScreen = () => {
     // const selecProduct =
 
     const user = auth.currentUser
-    const products = useSelector(state => setProducts(state.product))
+    const products = useSelector(state => setProducts(state))
     // console.log(products.product)
 
     // !Sign Out method
