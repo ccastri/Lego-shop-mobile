@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { selectBasketItems } from './features/basketSlice';
 import { setProducts } from './features/productSlice';
 import BasketScreen from './screens/BasketScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -23,12 +24,7 @@ export default function AppWrapper({ products }) {
 
   useEffect(() => {
     dispatch(setProducts(products))
-    // dispatch(setProducts({
-    //   id: products.id,
-    //   imgUrl: products.imgUrl,
-    //   title: products.title,
-    //   rating: products.rating
-    // }))
+    // dispatch(selectBasketItems(products))
 
   }, [products])
 

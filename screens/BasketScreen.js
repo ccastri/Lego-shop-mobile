@@ -16,7 +16,7 @@ const BasketScreen = () => {
     const dispatch = useDispatch();
     const [groupedItemsInBasket, setGroupedItemsInBasket] = useState([])
     const productT = JSON.stringify(product)
-    console.log(productT)
+    // console.log(productT)
     useEffect(() => {
         const groupedItems = items.reduce((results, item) => {
             (results[item.id] = results[item.id] || []).push(item);

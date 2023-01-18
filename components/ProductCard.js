@@ -16,7 +16,7 @@ const ProductCard = ({ id,
     short_description,
     price, }) => {
     const navigation = useNavigation()
-    console.log(id)
+
 
     const { toggle, toggleFunction } = useToggle()
     return (
